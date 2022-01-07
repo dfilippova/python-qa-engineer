@@ -1,0 +1,1 @@
+Проект для изучения курса Python QA Engineer
