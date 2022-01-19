@@ -27,6 +27,7 @@ def test_area_addition(first_figure, second_figure):
 
 
 def test_incorrect_area_addition(default_circle):
+    """Проверка передачи неправильного класса при добавлении площади"""
     error = 'После передачи неправильного класса должна появляться ошибка ValueError!'
 
     try:
