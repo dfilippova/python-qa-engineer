@@ -1,20 +1,16 @@
 from math import pi
 
-from src._figure import _Figure
+from src.figure import Figure
 
 
-class Circle(_Figure):
-    def __init__(self, radius):
-        self._radius = radius
+class Circle(Figure):
+    def __init__(self, a, name='Circle'):
+        self.a = a
 
-        super().__init__(name='Circle', area=self.get_area(), perimeter=self.get_perimeter())
-
-    @property
-    def radius(self):
-        return self._radius
+        super().__init__(name=name, area=self.get_area(), perimeter=self.get_perimeter())
 
     def get_area(self):
-        return round(pi * self.radius * self.radius, 2)
+        return round(pi * self.a * self.a, 2)
 
     def get_perimeter(self):
-        return round(pi * self.radius * 2, 2)
+        return round(pi * self.a * 2, 2)

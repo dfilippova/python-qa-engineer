@@ -1,42 +1,26 @@
 from math import sqrt
 
-from src._figure import _Figure
+from src.figure import Figure
 
 
-class Triangle(_Figure):
-    def __new__(cls, first_edge, second_edge, third_edge):
-        if (
-            first_edge + second_edge > third_edge and
-            first_edge + third_edge > second_edge and
-            second_edge + third_edge > first_edge
-        ):
-            return super().__new__(cls)
+class Triangle(Figure):
+    def __new__(cls, a, b, c):
+        if not (a + b > c and a + c > b and b + c > a):
+            return None
+        return super().__new__(cls)
 
-    def __init__(self, first_edge, second_edge, third_edge):
-        self._first_edge = first_edge
-        self._second_edge = second_edge
-        self._third_edge = third_edge
+    def __init__(self, a, b, c, name='Triangle'):
+        self.a = a
+        self.b = b
+        self.c = c
 
-        super().__init__(name='Triangle', area=self.get_area(), perimeter=self.get_perimeter())
-
-    @property
-    def first_edge(self):
-        return self._first_edge
-
-    @property
-    def second_edge(self):
-        return self._second_edge
-
-    @property
-    def third_edge(self):
-        return self._third_edge
+        super().__init__(name=name, area=self.get_area(), perimeter=self.get_perimeter())
 
     def get_area(self):
         semiperimeter = self.get_perimeter()/2
         return round(sqrt(
-            semiperimeter * (semiperimeter - self.first_edge) * (semiperimeter - self.second_edge) *
-            (semiperimeter - self.third_edge)
+            semiperimeter * (semiperimeter - self.a) * (semiperimeter - self.b) * (semiperimeter - self.c)
         ), 2)
 
     def get_perimeter(self):
-        return self.first_edge + self.second_edge + self.third_edge
+        return self.a + self.b + self.c
