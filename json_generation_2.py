@@ -2,7 +2,7 @@ import json
 from csv import DictReader
 
 with open('files/users.json', 'r') as file:
-    users_info = json.loads(file.read())
+    users_info = json.load(file)
 
 with open('files/books.csv', newline='') as file:
     reader = DictReader(file)
