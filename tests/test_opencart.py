@@ -1,40 +1,44 @@
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.by import By
+from page_objects.catalog_page import CatalogPage
+from page_objects.home_page import HomePage
+from page_objects.login_admin_page import LoginAdminPage
+from page_objects.product_page import ProductPage
+from page_objects.register_account_page import RegisterAccountPage
 
 
 def test_home_page(driver, url):
     """Проверка наличия элементов на главной странице"""
     driver.get(f'{url}:8081')
+    home_page = HomePage(driver)
 
     # Ожидание появления блока слайд-шоу
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[class="slideshow swiper-viewport"]'),
+    home_page.wait_for_element_to_appear(
+        locator=home_page.SLIDESHOW,
         message='Блок слайд-шоу отсутствует на главной странице'
     )
 
     # Ожидание появления заголовка Featured
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.XPATH, '//*[text()="Featured"]'),
+    home_page.wait_for_element_to_appear(
+        locator=home_page.FEATURED_HEADER,
         message='Заголовок Featured отсутствует на главной странице'
     )
 
     # Ожидание появления четырех карточек товаров
-    WebDriverWait(driver, 3).until(
-        lambda _driver: len(driver.find_elements(By.CSS_SELECTOR, '[class="product-thumb transition"]')) == 4,
-        message='Количество карточек товаров на главной странице не соответствует четырем'
+    home_page.wait_for_element_to_appear(
+        locator=home_page.PRODUCT_CARD,
+        message='Количество карточек товаров на главной странице не соответствует четырем',
+        quantity=4
     )
 
     # Ожидание появления четырех кнопок Add to Cart
-    WebDriverWait(driver, 3).until(
-        lambda _driver: len(driver.find_elements(
-            By.XPATH, '//*[text()="Add to Cart"]//parent::*[@type="button"]'
-        )) == 4,
-        message='Количество кнопок Add to Cart на главной странице не соответствует четырем'
+    home_page.wait_for_element_to_appear(
+        locator=home_page.ADD_TO_CART_BUTTON,
+        message='Количество кнопок Add to Cart на главной странице не соответствует четырем',
+        quantity=4
     )
 
     # Ожидание появления блока карусель
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[class="carousel swiper-viewport"]'),
+    home_page.wait_for_element_to_appear(
+        locator=home_page.CAROUSEL,
         message='Блок карусель отсутствует на главной странице'
     )
 
@@ -42,79 +46,79 @@ def test_home_page(driver, url):
 def test_catalog_page(driver, url):
     """Проверка наличия элементов на странице каталога"""
     driver.get(f'{url}:8081/desktops')
+    catalog_page = CatalogPage(driver)
 
     # Ожидание появления блока со списком групп
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[class="list-group"]'),
+    catalog_page.wait_for_element_to_appear(
+        locator=catalog_page.GROUP_LIST,
         message='Блок со списком групп отсутствует на странице каталога'
     )
 
     # Ожидание появления кнопки List
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="list-view"]'),
+    catalog_page.wait_for_element_to_appear(
+        locator=catalog_page.LIST_BUTTON,
         message='Кнопка List отсутствует на странице каталога'
     )
 
     # Ожидание появления кнопки Grid
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="grid-view"]'),
+    catalog_page.wait_for_element_to_appear(
+        locator=catalog_page.GRID_BUTTON,
         message='Кнопка Grid отсутствует на странице каталога'
     )
 
     # Ожидание появления ссылки Product Compare
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="compare-total"]'),
+    catalog_page.wait_for_element_to_appear(
+        locator=catalog_page.PRODUCT_COMPARE_LINK,
         message='Ссылка Product Compare отсутствует на странице каталога'
     )
 
     # Ожидание появления двенадцати карточек товаров
-    WebDriverWait(driver, 3).until(
-        lambda _driver: len(driver.find_elements(By.CSS_SELECTOR, '[class="product-thumb"]')) == 12,
-        message='Количество карточек товаров на странице каталога не соответствует двенадцати'
+    catalog_page.wait_for_element_to_appear(
+        locator=catalog_page.PRODUCT_CARD,
+        message='Количество карточек товаров на странице каталога не соответствует двенадцати',
+        quantity=12
     )
 
 
 def test_product_page(driver, url):
     """Проверка наличия элементов на странице товара"""
     driver.get(f'{url}:8081/iphone')
+    product_page = ProductPage(driver)
 
     # Ожидание появления основного (большого) изображения на странице товара
-    WebDriverWait(driver, 3).until(
-        lambda _driver: len(driver.find_elements(
-            By.XPATH, '(//*[contains(@class, "thumbnails")]//*[contains(@class, "thumbnail")])[1]'
-        )) == 1,
+    product_page.wait_for_element_to_appear(
+        locator=product_page.BIG_IMAGE,
         message='Количество больших изображений на странице товара не соответствует одному'
     )
 
     # Ожидание появления дополнительных (маленьких) изображений на странице товара
-    WebDriverWait(driver, 3).until(
-        lambda _driver: len(driver.find_elements(
-            By.CSS_SELECTOR, '[class="image-additional"] [class="thumbnail"]'
-        )) == 5,
-        message='Количество маленьких изображений на странице товара не соответствует пяти'
+    product_page.wait_for_element_to_appear(
+        locator=product_page.SMALL_IMAGE,
+        message='Количество маленьких изображений на странице товара не соответствует пяти',
+        quantity=5
     )
 
     # Ожидание появления инпута Quantity
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="input-quantity"]'),
+    product_page.wait_for_element_to_appear(
+        locator=product_page.QUANTITY_INPUT,
         message='Инпут Quantity отсутствует на странице товара'
     )
 
     # Ожидание появления кнопки Add to Cart
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="button-cart"]'),
+    product_page.wait_for_element_to_appear(
+        locator=product_page.ADD_TO_CART_BUTTON,
         message='Кнопка Add to Cart отсутствует на странице товара'
     )
 
     # Ожидание появления вкладки Description
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[href="#tab-description"]'),
+    product_page.wait_for_element_to_appear(
+        locator=product_page.DESCRIPTION_TAB,
         message='Вкладка Description отсутствует на странице товара'
     )
 
     # Ожидание появления вкладки Review
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[href="#tab-review"]'),
+    product_page.wait_for_element_to_appear(
+        locator=product_page.REVIEW_TAB,
         message='Вкладка Review отсутствует на странице товара'
     )
 
@@ -122,34 +126,35 @@ def test_product_page(driver, url):
 def test_login_admin_page(driver, url):
     """Проверка наличия элементов на странице авторизации админки"""
     driver.get(f'{url}:8081/admin')
+    login_admin_page = LoginAdminPage(driver)
 
     # Ожидание появления логотипа
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="header-logo"]'),
+    login_admin_page.wait_for_element_to_appear(
+        locator=login_admin_page.LOGO,
         message='Логотип отсутствует на странице авторизации админки'
     )
 
     # Ожидание появления инпута Username
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="input-username"]'),
+    login_admin_page.wait_for_element_to_appear(
+        locator=login_admin_page.USERNAME_INPUT,
         message='Инпут Username отсутствует на странице авторизации админки'
     )
 
     # Ожидание появления инпута Password
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="input-password"]'),
+    login_admin_page.wait_for_element_to_appear(
+        locator=login_admin_page.PASSWORD_INPUT,
         message='Инпут Password отсутствует на странице авторизации админки'
     )
 
     # Ожидание появления ссылки Forgotten Password
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.XPATH, '//*[text()="Forgotten Password"]'),
+    login_admin_page.wait_for_element_to_appear(
+        locator=login_admin_page.FORGOTTEN_PASSWORD_LINK,
         message='Ссылка Forgotten Password отсутствует на странице авторизации админки'
     )
 
     # Ожидание появления кнопки Login
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[type="submit"]'),
+    login_admin_page.wait_for_element_to_appear(
+        locator=login_admin_page.LOGIN_BUTTON,
         message='Кнопка Login отсутствует на странице авторизации админки'
     )
 
@@ -157,33 +162,34 @@ def test_login_admin_page(driver, url):
 def test_register_account_page(driver, url):
     """Проверка наличия элементов на странице регистрации пользователя"""
     driver.get(f'{url}:8081/index.php?route=account/register')
+    register_account_page = RegisterAccountPage(driver)
 
     # Ожидание появления ссылки на страницу авторизации
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.XPATH, '//*[text()="login page"]'),
+    register_account_page.wait_for_element_to_appear(
+        locator=register_account_page.LOGIN_PAGE_LINK,
         message='Ссылка на страницу авторизации отсутствует на странице регистрации пользователя'
     )
 
     # Ожидание появления блока со списком групп
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[class="list-group"]'),
+    register_account_page.wait_for_element_to_appear(
+        locator=register_account_page.GROUP_LIST,
         message='Блок со списком групп отсутствует на странице регистрации пользователя'
     )
 
     # Ожидание появления инпута First Name
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[id="input-firstname"]'),
+    register_account_page.wait_for_element_to_appear(
+        locator=register_account_page.FIRST_NAME_INPUT,
         message='Инпут First Name отсутствует на странице регистрации пользователя'
     )
 
     # Ожидание появления чекбокса Privacy Policy
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[type="checkbox"][name="agree"]'),
+    register_account_page.wait_for_element_to_appear(
+        locator=register_account_page.PRIVACY_POLICY_CHECKBOX,
         message='Чекбокс Privacy Policy отсутствует на странице регистрации пользователя'
     )
 
     # Ожидание появления кнопки Continue
-    WebDriverWait(driver, 3).until(
-        lambda _driver: driver.find_element(By.CSS_SELECTOR, '[type="submit"]'),
+    register_account_page.wait_for_element_to_appear(
+        locator=register_account_page.CONTINUE_BUTTON,
         message='Кнопка Continue отсутствует на странице регистрации пользователя'
     )
