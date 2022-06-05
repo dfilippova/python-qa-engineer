@@ -42,8 +42,22 @@ def test_add_product_on_admin_page(driver, url):
     product_name = 'New product'
 
     driver.get(f'{url}:8081/admin')
-    login_admin_page = AdminPage(driver)
-    login_admin_page.login()
+    admin_page = AdminPage(driver)
+    admin_page.login()
 
-    login_admin_page.add_product(product_name=product_name)
-    login_admin_page.check_product_name_in_product_table(product_name=product_name)
+    admin_page.go_to_products_section()
+    admin_page.add_product(product_name)
+    admin_page.check_product_name_in_product_table(product_name)
+
+
+def test_delete_product_on_admin_page(driver, url):
+    """Проверка удаления товара в админке"""
+    product_name = 'New product'
+
+    driver.get(f'{url}:8081/admin')
+    admin_page = AdminPage(driver)
+    admin_page.login()
+
+    admin_page.go_to_products_section()
+    admin_page.delete_product(product_name)
+    admin_page.check_product_name_not_in_product_table(product_name)

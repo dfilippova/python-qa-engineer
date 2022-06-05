@@ -25,3 +25,8 @@ class BasePage:
         active_input = self.driver.find_element(*input_locator)
         active_input.click()
         active_input.send_keys(data)
+
+    def confirm_alert(self):
+        alert = self.driver.switch_to.alert
+        alert.accept()
+        #self.browser.refresh()

@@ -16,6 +16,7 @@ class AdminPage(BasePage):
     SUBMENU = (By.CSS_SELECTOR, '[class="collapse in"]')
 
     PRODUCTS_PAGE_ADD_PRODUCT_BUTTON = (By.CSS_SELECTOR, '[data-original-title="Add New"]')
+    PRODUCTS_PAGE_DELETE_PRODUCT_BUTTON = (By.CSS_SELECTOR, '[data-original-title="Delete"]')
     PRODUCTS_PAGE_PRODUCT_NAME_INPUT = (By.CSS_SELECTOR, '[id="filter-product"] [id="input-name"]')
     PRODUCTS_PAGE_FILTER_BUTTON = (By.CSS_SELECTOR, '[id="button-filter"]')
 
@@ -36,6 +37,10 @@ class AdminPage(BasePage):
     def get_data_from_product_table(item_name: str):
         return By.XPATH, f'//*[@id="form-product"]//*[contains(text(), "{item_name}")]'
 
+    @staticmethod
+    def get_item_checkbox_from_product_table(item_name: str):
+        return By.XPATH, f'//*[@id="form-product"]//*[contains(text(), "{item_name}")]//parent::*//*[@type="checkbox"]'
+
     def login(self, username: str = 'user', password: str = 'bitnami'):
         self.enter_data(self.USERNAME_INPUT, username)
         self.enter_data(self.PASSWORD_INPUT, password)
@@ -47,14 +52,15 @@ class AdminPage(BasePage):
             message='Меню не появилось после нажатия на кнопку'
         )
 
-    def add_product(
-            self, product_name: str = 'Test product name', meta_tag_title: str = 'Test meta tag title',
-            model: str = 'Test model'
-    ):
+    def go_to_products_section(self):
         self.driver.find_element(*self.get_item_from_menu('Catalog')).click()
         self.wait_for_submenu_open()
         self.driver.find_element(*self.get_item_from_menu('Products')).click()
 
+    def add_product(
+            self, product_name: str = 'Test product name', meta_tag_title: str = 'Test meta tag title',
+            model: str = 'Test model'
+    ):
         self.driver.find_element(*self.PRODUCTS_PAGE_ADD_PRODUCT_BUTTON).click()
 
         self.enter_data(self.ADD_PRODUCT_PAGE_PRODUCT_NAME_INPUT, product_name)
@@ -65,11 +71,27 @@ class AdminPage(BasePage):
 
         self.driver.find_element(*self.ADD_PRODUCT_PAGE_SAVE_BUTTON).click()
 
-    def check_product_name_in_product_table(self, product_name: str = 'Test product name'):
+    def filter_products_by_name(self, product_name: str):
         self.enter_data(self.PRODUCTS_PAGE_PRODUCT_NAME_INPUT, product_name)
         self.driver.find_element(*self.PRODUCTS_PAGE_FILTER_BUTTON).click()
 
+    def check_product_name_in_product_table(self, product_name: str):
+        self.filter_products_by_name(product_name)
         self.wait_for_element_to_appear(
             locator=self.get_data_from_product_table(product_name),
             message=f'Названия {product_name} нет в таблице продуктов'
         )
+
+    def check_product_name_not_in_product_table(self, product_name: str):
+        self.filter_products_by_name(product_name)
+        self.wait_for_elements_to_appear(
+            locator=self.get_data_from_product_table(product_name),
+            message=f'Названия {product_name} не должно быть в таблице продуктов',
+            quantity=0
+        )
+
+    def delete_product(self, product_name: str):
+        self.filter_products_by_name(product_name)
+        self.driver.find_element(*self.get_item_checkbox_from_product_table(product_name)).click()
+        self.driver.find_element(*self.PRODUCTS_PAGE_DELETE_PRODUCT_BUTTON).click()
+        self.confirm_alert()
