@@ -1,3 +1,5 @@
+import pytest
+
 from page_objects.home_page import HomePage
 
 
@@ -47,3 +49,14 @@ def test_register_account(driver, url):
     register_account_page = home_page.header.open_register_account_page()
     success_register_account_page = register_account_page.register_account()
     success_register_account_page.check_success_header()
+
+
+@pytest.mark.parametrize('currency', ['€', '£', '$'], ids=['euro', 'pound sterling', 'us dollar'])
+def test_currency_change(driver, url, currency):
+    """Проверка изменения валюты"""
+
+    driver.get(f'{url}:8081')
+    home_page = HomePage(driver)
+
+    home_page.header.change_currency(currency)
+    home_page.header.check_currency_from_cart_button(currency)
