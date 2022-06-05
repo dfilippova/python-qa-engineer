@@ -29,4 +29,3 @@ class BasePage:
     def confirm_alert(self):
         alert = self.driver.switch_to.alert
         alert.accept()
-        #self.browser.refresh()
