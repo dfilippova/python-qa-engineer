@@ -1,10 +1,10 @@
-from page_objects.login_admin_page import LoginAdminPage
+from page_objects.admin_page import AdminPage
 
 
-def test_elements_on_login_admin_page(driver, url):
+def test_elements_on_admin_page(driver, url):
     """Проверка наличия элементов на странице авторизации админки"""
     driver.get(f'{url}:8081/admin')
-    login_admin_page = LoginAdminPage(driver)
+    login_admin_page = AdminPage(driver)
 
     # Ожидание появления логотипа
     login_admin_page.wait_for_element_to_appear(
@@ -35,3 +35,15 @@ def test_elements_on_login_admin_page(driver, url):
         locator=login_admin_page.LOGIN_BUTTON,
         message='Кнопка Login отсутствует на странице авторизации админки'
     )
+
+
+def test_add_product_on_admin_page(driver, url):
+    """Проверка добавления нового товара в админке"""
+    product_name = 'New product'
+
+    driver.get(f'{url}:8081/admin')
+    login_admin_page = AdminPage(driver)
+    login_admin_page.login()
+
+    login_admin_page.add_product(product_name=product_name)
+    login_admin_page.check_product_name_in_product_table(product_name=product_name)

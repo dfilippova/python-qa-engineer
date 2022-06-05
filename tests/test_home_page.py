@@ -21,14 +21,14 @@ def test_elements_on_home_page(driver, url):
     )
 
     # Ожидание появления четырех карточек товаров
-    home_page.wait_for_element_to_appear(
+    home_page.wait_for_elements_to_appear(
         locator=home_page.PRODUCT_CARD,
         message='Количество карточек товаров на главной странице не соответствует четырем',
         quantity=4
     )
 
     # Ожидание появления четырех кнопок Add to Cart
-    home_page.wait_for_element_to_appear(
+    home_page.wait_for_elements_to_appear(
         locator=home_page.ADD_TO_CART_BUTTON,
         message='Количество кнопок Add to Cart на главной странице не соответствует четырем',
         quantity=4
@@ -41,7 +41,7 @@ def test_elements_on_home_page(driver, url):
     )
 
 
-def test_register_account(driver, url):
+def test_register_account_on_home_page(driver, url):
     """Проверка регистрации нового пользователя"""
     driver.get(f'{url}:8081')
     home_page = HomePage(driver)
@@ -52,7 +52,7 @@ def test_register_account(driver, url):
 
 
 @pytest.mark.parametrize('currency', ['€', '£', '$'], ids=['euro', 'pound sterling', 'us dollar'])
-def test_currency_change(driver, url, currency):
+def test_currency_change_on_home_page(driver, url, currency):
     """Проверка изменения валюты"""
 
     driver.get(f'{url}:8081')

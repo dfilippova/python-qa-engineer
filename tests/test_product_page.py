@@ -13,7 +13,7 @@ def test_elements_on_product_page(driver, url):
     )
 
     # Ожидание появления дополнительных (маленьких) изображений на странице товара
-    product_page.wait_for_element_to_appear(
+    product_page.wait_for_elements_to_appear(
         locator=product_page.SMALL_IMAGE,
         message='Количество маленьких изображений на странице товара не соответствует пяти',
         quantity=5

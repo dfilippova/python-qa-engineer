@@ -24,11 +24,6 @@ class RegisterAccountPage(BasePage):
         else:
             return By.CSS_SELECTOR, '[name="newsletter"][value="0"]'
 
-    def enter_data(self, input_locator: tuple, data: str):
-        active_input = self.driver.find_element(*input_locator)
-        active_input.click()
-        active_input.send_keys(data)
-
     def register_account(
             self, first_name: str = fake_name(), last_name: str = fake_last_name(), email: str = fake_email(),
             phone: str = fake_phone(), password: str = fake_password(), subscribe: bool = False

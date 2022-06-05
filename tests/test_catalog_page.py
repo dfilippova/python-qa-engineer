@@ -31,7 +31,7 @@ def test_elements_on_catalog_page(driver, url):
     )
 
     # Ожидание появления двенадцати карточек товаров
-    catalog_page.wait_for_element_to_appear(
+    catalog_page.wait_for_elements_to_appear(
         locator=catalog_page.PRODUCT_CARD,
         message='Количество карточек товаров на странице каталога не соответствует двенадцати',
         quantity=12
