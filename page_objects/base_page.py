@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+import allure
 from selenium.webdriver.support.wait import WebDriverWait
 
 if TYPE_CHECKING:
@@ -12,20 +13,24 @@ class BasePage:
         self.driver = driver
 
     def wait_for_element_to_appear(self, locator: tuple, message: str, timeout: int = 3):
-        WebDriverWait(self.driver, timeout).until(
-            lambda _driver: self.driver.find_elements(*locator), message=message
-        )
+        with allure.step(f'Подождать появления элемента с локатором {locator}'):
+            WebDriverWait(self.driver, timeout).until(
+                lambda _driver: self.driver.find_elements(*locator), message=message
+            )
 
     def wait_for_elements_to_appear(self, locator: tuple, message: str, quantity: int = 1, timeout: int = 3):
-        WebDriverWait(self.driver, timeout).until(
-            lambda _driver: len(self.driver.find_elements(*locator)) == quantity, message=message
-        )
+        with allure.step(f'Подождать появления элементов с локатором {locator} в количестве {quantity}'):
+            WebDriverWait(self.driver, timeout).until(
+                lambda _driver: len(self.driver.find_elements(*locator)) == quantity, message=message
+            )
 
     def enter_data(self, input_locator: tuple, data: str):
-        active_input = self.driver.find_element(*input_locator)
-        active_input.click()
-        active_input.send_keys(data)
+        with allure.step(f'Ввести данные "{data}" в инпут с локатором {input_locator}'):
+            active_input = self.driver.find_element(*input_locator)
+            active_input.click()
+            active_input.send_keys(data)
 
+    @allure.step('Подтвердить алерт')
     def confirm_alert(self):
         alert = self.driver.switch_to.alert
         alert.accept()

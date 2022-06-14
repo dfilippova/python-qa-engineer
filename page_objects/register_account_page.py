@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 from page_objects.base_page import BasePage
@@ -24,6 +25,7 @@ class RegisterAccountPage(BasePage):
         else:
             return By.CSS_SELECTOR, '[name="newsletter"][value="0"]'
 
+    @allure.step('Зарегистрировать аккаунт')
     def register_account(
             self, first_name: str = fake_name(), last_name: str = fake_last_name(), email: str = fake_email(),
             phone: str = fake_phone(), password: str = fake_password(), subscribe: bool = False
@@ -35,9 +37,13 @@ class RegisterAccountPage(BasePage):
         self.enter_data(self.PASSWORD_INPUT, password)
         self.enter_data(self.PASSWORD_CONFIRM_INPUT, password)
 
-        self.driver.find_element(*self.get_subscribe_radiobutton(subscribe)).click()
-        self.driver.find_element(*self.PRIVACY_POLICY_CHECKBOX).click()
+        with allure.step(f'Активировать радиобаттон подписки в состоянии {subscribe}'):
+            self.driver.find_element(*self.get_subscribe_radiobutton(subscribe)).click()
 
-        self.driver.find_element(*self.CONTINUE_BUTTON).click()
+        with allure.step('Активировать чекбокс Privacy Policy'):
+            self.driver.find_element(*self.PRIVACY_POLICY_CHECKBOX).click()
+
+        with allure.step('Нажать на кнопку Continue'):
+            self.driver.find_element(*self.CONTINUE_BUTTON).click()
 
         return SuccessRegisterAccountPage(self.driver)
