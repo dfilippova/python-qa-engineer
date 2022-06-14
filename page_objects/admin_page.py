@@ -46,7 +46,7 @@ class AdminPage(BasePage):
     def login(self, username: str = 'user', password: str = 'bitnami'):
         self.enter_data(self.USERNAME_INPUT, username)
         self.enter_data(self.PASSWORD_INPUT, password)
-        self.driver.find_element(*self.LOGIN_BUTTON).click()
+        self.click_on_element(self.LOGIN_BUTTON)
 
     @allure.step('Подождать открытия подменю')
     def wait_for_submenu_open(self):
@@ -57,35 +57,29 @@ class AdminPage(BasePage):
 
     @allure.step('Перейти в раздел товаров')
     def go_to_products_section(self):
-        with allure.step('Нажать на Catalog в левой панели'):
-            self.driver.find_element(*self.get_item_from_menu('Catalog')).click()
+        self.click_on_element(self.get_item_from_menu('Catalog'))
         self.wait_for_submenu_open()
-        with allure.step('Нажать на Products в левой панели'):
-            self.driver.find_element(*self.get_item_from_menu('Products')).click()
+        self.click_on_element(self.get_item_from_menu('Products'))
 
     @allure.step('Добавить новый товар')
     def add_product(
             self, product_name: str = 'Test product name', meta_tag_title: str = 'Test meta tag title',
             model: str = 'Test model'
     ):
-        with allure.step('Нажать на кнопку для добавления нового товар'):
-            self.driver.find_element(*self.PRODUCTS_PAGE_ADD_PRODUCT_BUTTON).click()
+        self.click_on_element(self.PRODUCTS_PAGE_ADD_PRODUCT_BUTTON)
 
         self.enter_data(self.ADD_PRODUCT_PAGE_PRODUCT_NAME_INPUT, product_name)
         self.enter_data(self.ADD_PRODUCT_PAGE_META_TAG_TITLE_INPUT, meta_tag_title)
 
-        with allure.step('Изменить вкладку на Data'):
-            self.driver.find_element(*self.get_tab_from_add_product_form('Data')).click()
+        self.click_on_element(self.get_tab_from_add_product_form('Data'))
         self.enter_data(self.ADD_PRODUCT_PAGE_MODEL_INPUT, model)
 
-        with allure.step('Нажать на кнопку Save'):
-            self.driver.find_element(*self.ADD_PRODUCT_PAGE_SAVE_BUTTON).click()
+        self.click_on_element(self.ADD_PRODUCT_PAGE_SAVE_BUTTON)
 
     def filter_products_by_name(self, product_name: str):
         with allure.step(f'Отфильтровать товары по имени "{product_name}"'):
             self.enter_data(self.PRODUCTS_PAGE_PRODUCT_NAME_INPUT, product_name)
-            with allure.step('Нажать на кнопку Filter'):
-                self.driver.find_element(*self.PRODUCTS_PAGE_FILTER_BUTTON).click()
+            self.click_on_element(self.PRODUCTS_PAGE_FILTER_BUTTON)
 
     def check_product_name_in_product_table(self, product_name: str):
         with allure.step(f'Проверить наличие товара "{product_name}" в таблице товаров'):
@@ -107,7 +101,6 @@ class AdminPage(BasePage):
     def delete_product(self, product_name: str):
         with allure.step(f'Удалить товар "{product_name}"'):
             self.filter_products_by_name(product_name)
-            with allure.step(f'Выбрать товар "{product_name}" и нажать на кнопку Delete'):
-                self.driver.find_element(*self.get_item_checkbox_from_product_table(product_name)).click()
-            self.driver.find_element(*self.PRODUCTS_PAGE_DELETE_PRODUCT_BUTTON).click()
+            self.click_on_element(self.get_item_checkbox_from_product_table(product_name))
+            self.click_on_element(self.PRODUCTS_PAGE_DELETE_PRODUCT_BUTTON)
             self.confirm_alert()

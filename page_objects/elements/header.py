@@ -24,13 +24,13 @@ class Header(BasePage):
 
     @allure.step('Открыть страницу регистрации пользователя с помощью кнопки My account')
     def open_register_account_page(self) -> RegisterAccountPage:
-        self.driver.find_element(*self.MY_ACCOUNT_BUTTON).click()
+        self.click_on_element(self.MY_ACCOUNT_BUTTON)
         self.wait_for_element_to_appear(
             locator=self.DROPDOWN_MENU,
             message='Меню не появилось после нажатия на кнопку'
         )
 
-        self.driver.find_element(*self.get_context_menu_item('Register')).click()
+        self.click_on_element(self.get_context_menu_item('Register'))
         return RegisterAccountPage(self.driver)
 
     def wait_for_currency_change(self, currency: str):
@@ -42,13 +42,13 @@ class Header(BasePage):
 
     def change_currency(self, currency: str):
         with allure.step(f'Изменить валюту на {currency}'):
-            self.driver.find_element(*self.CURRENCY_BUTTON).click()
+            self.click_on_element(self.CURRENCY_BUTTON)
             self.wait_for_element_to_appear(
                 locator=self.DROPDOWN_MENU,
                 message='Меню не появилось после нажатия на кнопку'
             )
 
-        self.driver.find_element(*self.get_context_menu_item(currency)).click()
+        self.click_on_element(self.get_context_menu_item(currency))
         return self.wait_for_currency_change(currency)
 
     def check_currency_from_cart_button(self, currency: str):

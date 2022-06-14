@@ -37,13 +37,8 @@ class RegisterAccountPage(BasePage):
         self.enter_data(self.PASSWORD_INPUT, password)
         self.enter_data(self.PASSWORD_CONFIRM_INPUT, password)
 
-        with allure.step(f'Активировать радиобаттон подписки в состоянии {subscribe}'):
-            self.driver.find_element(*self.get_subscribe_radiobutton(subscribe)).click()
-
-        with allure.step('Активировать чекбокс Privacy Policy'):
-            self.driver.find_element(*self.PRIVACY_POLICY_CHECKBOX).click()
-
-        with allure.step('Нажать на кнопку Continue'):
-            self.driver.find_element(*self.CONTINUE_BUTTON).click()
+        self.click_on_element(self.get_subscribe_radiobutton(subscribe))
+        self.click_on_element(self.PRIVACY_POLICY_CHECKBOX)
+        self.click_on_element(self.CONTINUE_BUTTON)
 
         return SuccessRegisterAccountPage(self.driver)
