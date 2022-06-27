@@ -7,6 +7,7 @@ from page_objects.base_page import BasePage
 class AdminPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
+        self.driver.get(f'{self.url}/admin')
 
     LOGO = (By.CSS_SELECTOR, '[id="header-logo"]')
     USERNAME_INPUT = (By.CSS_SELECTOR, '[id="input-username"]')

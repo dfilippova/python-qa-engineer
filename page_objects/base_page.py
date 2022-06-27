@@ -1,5 +1,4 @@
 import allure
-import logging
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -7,11 +6,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
-        self.logger = logging.getLogger(type(self).__name__)
-
-        file_handler = logging.FileHandler('logs.log')
-        file_handler.setFormatter(logging.Formatter('%(levelname)s - %(asctime)s : %(message)s'))
-        self.logger.addHandler(file_handler)
+        self.url = f'{driver.url}:8081'
+        self.logger = driver.logger
 
     def wait_for_element_to_appear(self, locator: tuple, message: str, timeout: int = 3):
         with allure.step(f'Подождать появления элемента с локатором {locator}'):

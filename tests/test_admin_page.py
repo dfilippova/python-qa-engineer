@@ -5,7 +5,7 @@ from page_objects.admin_page import AdminPage
 
 @allure.feature('Страница админки')
 @allure.title('Проверка наличия элементов на странице авторизации админки')
-def test_elements_on_admin_page(driver, url):
+def test_elements_on_admin_page(driver):
     """
     Кейс:
     - зайти на страницу админки /admin
@@ -16,7 +16,6 @@ def test_elements_on_admin_page(driver, url):
     - ссылка Forgotten Password отображается на странице
     - кнопка Login отображается на странице
     """
-    driver.get(f'{url}:8081/admin')
     login_admin_page = AdminPage(driver)
 
     # Ожидание появления логотипа
@@ -52,7 +51,7 @@ def test_elements_on_admin_page(driver, url):
 
 @allure.feature('Страница админки')
 @allure.title('Проверка добавления нового товара в админке')
-def test_add_product_on_admin_page(driver, url):
+def test_add_product_on_admin_page(driver):
     """
     Кейс:
     - зайти на страницу админки /admin
@@ -64,7 +63,6 @@ def test_add_product_on_admin_page(driver, url):
     """
     product_name = 'New product'
 
-    driver.get(f'{url}:8081/admin')
     admin_page = AdminPage(driver)
     admin_page.login()
 
@@ -75,7 +73,7 @@ def test_add_product_on_admin_page(driver, url):
 
 @allure.feature('Страница админки')
 @allure.title('Проверка удаления товара в админке')
-def test_delete_product_on_admin_page(driver, url):
+def test_delete_product_on_admin_page(driver):
     """
     Кейс:
     - зайти на страницу админки /admin
@@ -87,7 +85,6 @@ def test_delete_product_on_admin_page(driver, url):
     """
     product_name = 'New product'
 
-    driver.get(f'{url}:8081/admin')
     admin_page = AdminPage(driver)
     admin_page.login()
 

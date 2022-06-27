@@ -6,7 +6,7 @@ from page_objects.home_page import HomePage
 
 @allure.feature('Главная страница')
 @allure.title('Проверка наличия элементов на главной странице')
-def test_elements_on_home_page(driver, url):
+def test_elements_on_home_page(driver):
     """
     Кейс:
     - зайти на главную страницу
@@ -17,7 +17,6 @@ def test_elements_on_home_page(driver, url):
     - кнопки Add to Cart отображаются на странице в количестве 4 штук
     - блок карусель отображается на странице
     """
-    driver.get(f'{url}:8081')
     home_page = HomePage(driver)
 
     # Ожидание появления блока слайд-шоу
@@ -55,7 +54,7 @@ def test_elements_on_home_page(driver, url):
 
 @allure.feature('Главная страница')
 @allure.title('Проверка регистрации нового пользователя')
-def test_register_account_on_home_page(driver, url):
+def test_register_account_on_home_page(driver):
     """
     Кейс:
     - зайти на главную страницу
@@ -65,7 +64,6 @@ def test_register_account_on_home_page(driver, url):
     - выпадающее меню появляется после нажатия на кнопку My account
     - заголовок Your Account Has Been Created! отображается после регистрации пользователя
     """
-    driver.get(f'{url}:8081')
     home_page = HomePage(driver)
 
     register_account_page = home_page.header.open_register_account_page()
@@ -76,7 +74,7 @@ def test_register_account_on_home_page(driver, url):
 @allure.feature('Главная страница')
 @allure.title('Проверка изменения валюты')
 @pytest.mark.parametrize('currency', ['€', '£', '$'], ids=['euro', 'pound sterling', 'us dollar'])
-def test_currency_change_on_home_page(driver, url, currency):
+def test_currency_change_on_home_page(driver, currency):
     """
     Кейс:
     - зайти на главную страницу
@@ -85,8 +83,6 @@ def test_currency_change_on_home_page(driver, url, currency):
     - выпадающее меню появляется после нажатия на кнопку Currency
     - валюта на кнопке корзины соответствует выбранной
     """
-
-    driver.get(f'{url}:8081')
     home_page = HomePage(driver)
 
     home_page.header.change_currency(currency)

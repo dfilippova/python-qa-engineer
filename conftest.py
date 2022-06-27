@@ -26,6 +26,7 @@ def driver(request):
     executor = request.config.getoption('--executor')
     vnc = request.config.getoption('--vnc')
     browser_version = request.config.getoption('--browser_version')
+    url = request.config.getoption('--url')
 
     logger = logging.getLogger(request.node.name)
     file_handler = logging.FileHandler('logs.log')
@@ -52,7 +53,7 @@ def driver(request):
             raise ValueError(f'Browser {browser_name} is not supported! Try to use chrome, firefox, opera or safari')
 
     else:
-        executor_url = 'http://{executor}:4444/wd/hub'
+        executor_url = f'http://{executor}:4444/wd/hub'
         caps = {
             'browserName': browser_name,
             'browserVersion': browser_version,
@@ -72,9 +73,8 @@ def driver(request):
 
     browser.maximize_window()
 
-    driver.log_level = log_level
-    driver.logger = logger
-    driver.test_name = request.node.name
+    browser.logger = logger
+    browser.url = url
 
     def fin():
         browser.close()
@@ -83,8 +83,3 @@ def driver(request):
     request.addfinalizer(fin)
 
     return browser
-
-
-@pytest.fixture
-def url(request):
-    return request.config.getoption('--url')

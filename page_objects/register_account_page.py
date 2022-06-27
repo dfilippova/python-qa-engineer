@@ -7,6 +7,10 @@ from page_objects.success_register_account_page import SuccessRegisterAccountPag
 
 
 class RegisterAccountPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.get(f'{self.url}/index.php?route=account/register')
+
     LOGIN_PAGE_LINK = (By.XPATH, '//*[text()="login page"]')
     GROUP_LIST = (By.CSS_SELECTOR, '[class="list-group"]')
     FIRST_NAME_INPUT = (By.CSS_SELECTOR, '[id="input-firstname"]')

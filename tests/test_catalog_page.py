@@ -5,7 +5,7 @@ from page_objects.catalog_page import CatalogPage
 
 @allure.feature('Страница каталога')
 @allure.title('Проверка наличия элементов на странице каталога')
-def test_elements_on_catalog_page(driver, url):
+def test_elements_on_catalog_page(driver):
     """
     Кейс:
     - зайти на страницу каталога /desktops
@@ -16,7 +16,6 @@ def test_elements_on_catalog_page(driver, url):
     - ссылка Product Compare отображается на странице
     - карточки товаров отображаются на странице в количестве 12 штук
     """
-    driver.get(f'{url}:8081/desktops')
     catalog_page = CatalogPage(driver)
 
     # Ожидание появления блока со списком групп

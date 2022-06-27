@@ -5,7 +5,7 @@ from page_objects.product_page import ProductPage
 
 @allure.feature('Страница товара')
 @allure.title('Проверка наличия элементов на странице товара')
-def test_elements_on_product_page(driver, url):
+def test_elements_on_product_page(driver):
     """
     Кейс:
     - зайти на страницу товара /iphone
@@ -17,7 +17,6 @@ def test_elements_on_product_page(driver, url):
     - вкладка Description отображается на странице
     - вкладка Review отображается на странице
     """
-    driver.get(f'{url}:8081/iphone')
     product_page = ProductPage(driver)
 
     # Ожидание появления основного (большого) изображения на странице товара
