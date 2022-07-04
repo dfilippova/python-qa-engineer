@@ -1,0 +1,38 @@
+Отчёт о состоянии системы:
+Пользователи системы: dsharando, _windowserver, _oahd, root, _cmiodalassistants, _ctkd, _spotlight, _assetcache, _softwareupdate, _installcoordinationd, _iconservices, _locationd, _hidd, _fpsd, _coreaudiod, _gamecontrollerd, _driverkit, _distnote, _analyticsd, _applepay, nobody, _networkd, _trustd, _reportmemoryexception, _nsurlsessiond, _appleevents, _mdnsresponder, _usbmuxd, _timed, _netbios;
+Процессов запущено: 555;
+Пользовательских процессов: 
+dsharando: 368
+_windowserver: 2
+_oahd: 1
+root: 131
+_cmiodalassistants: 6
+_ctkd: 1
+_spotlight: 3
+_assetcache: 2
+_softwareupdate: 2
+_installcoordinationd: 1
+_iconservices: 1
+_locationd: 5
+_hidd: 1
+_fpsd: 4
+_coreaudiod: 3
+_gamecontrollerd: 1
+_driverkit: 3
+_distnote: 2
+_analyticsd: 2
+_applepay: 1
+nobody: 1
+_networkd: 2
+_trustd: 2
+_reportmemoryexception: 1
+_nsurlsessiond: 2
+_appleevents: 2
+_mdnsresponder: 1
+_usbmuxd: 1
+_timed: 1
+_netbios: 1;
+Всего памяти используется: 74.59999999999998 mb;
+Всего CPU используется: 93.59999999999997%;
+Больше всего памяти использует: /Applications/PyChar;
+Больше всего CPU использует:  /Library/Frameworks
