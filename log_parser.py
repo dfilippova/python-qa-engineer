@@ -19,6 +19,7 @@ else:
             file_paths.append(os.path.join(args.path, item))
 
 for file_path in file_paths:
+    error_message = ''
     report = {
         'File path': file_path,
         'Number of requests': None,
@@ -48,12 +49,15 @@ for file_path in file_paths:
             url_match = re.search('"(GET|HEAD|POST|PUT|DELETE|CONNECT|OPTIONS|TRACE|PATCH) (\S+) +HTTP', line)
             str_duration = line.split(' ')[-1]
 
-            if ip_match and date_match and method_match and url_match:
-                ip = ip_match.group()
-                date = date_match.group()
-                method = method_match.group(1)
-                url = url_match.group(2)
-                duration = int(str_duration)
+            if not(ip_match and date_match and method_match and url_match and str_duration):
+                error_message = f'Logs format in file "{file_path}" is not supported!'
+                continue
+
+            ip = ip_match.group()
+            date = date_match.group()
+            method = method_match.group(1)
+            url = url_match.group(2)
+            duration = int(str_duration)
 
             report['Number of requests by HTTP methods'][method.upper()] += 1
 
@@ -81,17 +85,21 @@ for file_path in file_paths:
             else:
                 all_requests[ip] = 1
 
-        sorted_keys = sorted(all_requests, key=all_requests.get, reverse=True)
-        for i in range(3):
-            report['Top 3 IP'][sorted_keys[i]] = all_requests[sorted_keys[i]]
+        if not error_message:
+            sorted_keys = sorted(all_requests, key=all_requests.get, reverse=True)
+            for i in range(3):
+                report['Top 3 IP'][sorted_keys[i]] = all_requests[sorted_keys[i]]
 
         report['Number of requests'] = number + 1
 
-    print(json.dumps(report, indent=4))
+    if error_message:
+        print(error_message)
+    else:
+        print(json.dumps(report, indent=4))
 
-    file_name = (
-        f'report_{os.path.basename(file_path).replace(".", "_")}_'
-        f'{datetime.now().strftime("%d-%m-%Y-%H:%M.json")}'
-    )
-    with open(file=file_name, mode='w') as f:
-        f.write(json.dumps(report, indent=4))
+        file_name = (
+            f'report_{os.path.basename(file_path).replace(".", "_")}_'
+            f'{datetime.now().strftime("%d-%m-%Y-%H:%M.json")}'
+        )
+        with open(file=file_name, mode='w') as f:
+            f.write(json.dumps(report, indent=4))
