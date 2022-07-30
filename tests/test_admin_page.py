@@ -1,9 +1,21 @@
+import allure
+
 from page_objects.admin_page import AdminPage
 
 
-def test_elements_on_admin_page(driver, url):
-    """Проверка наличия элементов на странице авторизации админки"""
-    driver.get(f'{url}:8081/admin')
+@allure.feature('Страница админки')
+@allure.title('Проверка наличия элементов на странице авторизации админки')
+def test_elements_on_admin_page(driver):
+    """
+    Кейс:
+    - зайти на страницу админки /admin
+    Ожидается:
+    - логотип отображается на странице
+    - инпут Username отображается на странице
+    - инпут Password отображается на странице
+    - ссылка Forgotten Password отображается на странице
+    - кнопка Login отображается на странице
+    """
     login_admin_page = AdminPage(driver)
 
     # Ожидание появления логотипа
@@ -37,11 +49,20 @@ def test_elements_on_admin_page(driver, url):
     )
 
 
-def test_add_product_on_admin_page(driver, url):
-    """Проверка добавления нового товара в админке"""
+@allure.feature('Страница админки')
+@allure.title('Проверка добавления нового товара в админке')
+def test_add_product_on_admin_page(driver):
+    """
+    Кейс:
+    - зайти на страницу админки /admin
+    - авторизоваться под админом
+    - перейти в раздел товаров
+    - ввести данные товара и нажать на кнопку
+    Ожидается:
+    - добавленный товар отображается в таблице товаров
+    """
     product_name = 'New product'
 
-    driver.get(f'{url}:8081/admin')
     admin_page = AdminPage(driver)
     admin_page.login()
 
@@ -50,11 +71,20 @@ def test_add_product_on_admin_page(driver, url):
     admin_page.check_product_name_in_product_table(product_name)
 
 
-def test_delete_product_on_admin_page(driver, url):
-    """Проверка удаления товара в админке"""
+@allure.feature('Страница админки')
+@allure.title('Проверка удаления товара в админке')
+def test_delete_product_on_admin_page(driver):
+    """
+    Кейс:
+    - зайти на страницу админки /admin
+    - авторизоваться под администратором
+    - перейти в раздел товаров
+    - найти нужный товар и удалить его
+    Ожидается:
+    - выбранный товар не отображается в таблице товаров
+    """
     product_name = 'New product'
 
-    driver.get(f'{url}:8081/admin')
     admin_page = AdminPage(driver)
     admin_page.login()
 

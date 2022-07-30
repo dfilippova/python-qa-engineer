@@ -1,11 +1,22 @@
+import allure
 import pytest
 
 from page_objects.home_page import HomePage
 
 
-def test_elements_on_home_page(driver, url):
-    """Проверка наличия элементов на главной странице"""
-    driver.get(f'{url}:8081')
+@allure.feature('Главная страница')
+@allure.title('Проверка наличия элементов на главной странице')
+def test_elements_on_home_page(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    Ожидается:
+    - блок слайд-шоу отображается на странице
+    - заголовок Featured отображается на странице
+    - карточки товаров отображаются на странице в количестве 4 штук
+    - кнопки Add to Cart отображаются на странице в количестве 4 штук
+    - блок карусель отображается на странице
+    """
     home_page = HomePage(driver)
 
     # Ожидание появления блока слайд-шоу
@@ -41,9 +52,18 @@ def test_elements_on_home_page(driver, url):
     )
 
 
-def test_register_account_on_home_page(driver, url):
-    """Проверка регистрации нового пользователя"""
-    driver.get(f'{url}:8081')
+@allure.feature('Главная страница')
+@allure.title('Проверка регистрации нового пользователя')
+def test_register_account_on_home_page(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - открыть страницу регистрации пользователя с помощью кнопки My account
+    - ввести данные пользователя и нажать на кнопку Continue
+    Ожидается:
+    - выпадающее меню появляется после нажатия на кнопку My account
+    - заголовок Your Account Has Been Created! отображается после регистрации пользователя
+    """
     home_page = HomePage(driver)
 
     register_account_page = home_page.header.open_register_account_page()
@@ -51,11 +71,18 @@ def test_register_account_on_home_page(driver, url):
     success_register_account_page.check_success_header()
 
 
+@allure.feature('Главная страница')
+@allure.title('Проверка изменения валюты')
 @pytest.mark.parametrize('currency', ['€', '£', '$'], ids=['euro', 'pound sterling', 'us dollar'])
-def test_currency_change_on_home_page(driver, url, currency):
-    """Проверка изменения валюты"""
-
-    driver.get(f'{url}:8081')
+def test_currency_change_on_home_page(driver, currency):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - изменить валюту
+    Ожидается:
+    - выпадающее меню появляется после нажатия на кнопку Currency
+    - валюта на кнопке корзины соответствует выбранной
+    """
     home_page = HomePage(driver)
 
     home_page.header.change_currency(currency)

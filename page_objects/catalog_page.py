@@ -4,6 +4,10 @@ from page_objects.base_page import BasePage
 
 
 class CatalogPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.get(f'{self.url}/desktops')
+
     GROUP_LIST = (By.CSS_SELECTOR, '[class="list-group"]')
     LIST_BUTTON = (By.CSS_SELECTOR, '[id="list-view"]')
     GRID_BUTTON = (By.CSS_SELECTOR, '[id="grid-view"]')

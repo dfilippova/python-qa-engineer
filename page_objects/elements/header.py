@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 from page_objects.base_page import BasePage
@@ -21,34 +22,38 @@ class Header(BasePage):
     def get_currency_from_cart_button(currency: str):
         return By.XPATH, f'//*[contains(@id, "cart-total")][contains(text(), "{currency}")]'
 
+    @allure.step('Открыть страницу регистрации пользователя с помощью кнопки My account')
     def open_register_account_page(self) -> RegisterAccountPage:
-        self.driver.find_element(*self.MY_ACCOUNT_BUTTON).click()
+        self.click_on_element(self.MY_ACCOUNT_BUTTON)
         self.wait_for_element_to_appear(
             locator=self.DROPDOWN_MENU,
             message='Меню не появилось после нажатия на кнопку'
         )
 
-        self.driver.find_element(*self.get_context_menu_item('Register')).click()
+        self.click_on_element(self.get_context_menu_item('Register'))
         return RegisterAccountPage(self.driver)
 
     def wait_for_currency_change(self, currency: str):
-        return self.wait_for_element_to_appear(
-            locator=self.get_currency_from_currency_button(currency),
-            message=f'Валюта не была изменена на {currency}'
-        )
+        with allure.step(f'Подождать изменения валюты на {currency} на кнопку Currency'):
+            return self.wait_for_element_to_appear(
+                locator=self.get_currency_from_currency_button(currency),
+                message=f'Валюта не была изменена на {currency}'
+            )
 
     def change_currency(self, currency: str):
-        self.driver.find_element(*self.CURRENCY_BUTTON).click()
-        self.wait_for_element_to_appear(
-            locator=self.DROPDOWN_MENU,
-            message='Меню не появилось после нажатия на кнопку'
-        )
+        with allure.step(f'Изменить валюту на {currency}'):
+            self.click_on_element(self.CURRENCY_BUTTON)
+            self.wait_for_element_to_appear(
+                locator=self.DROPDOWN_MENU,
+                message='Меню не появилось после нажатия на кнопку'
+            )
 
-        self.driver.find_element(*self.get_context_menu_item(currency)).click()
+        self.click_on_element(self.get_context_menu_item(currency))
         return self.wait_for_currency_change(currency)
 
     def check_currency_from_cart_button(self, currency: str):
-        return self.wait_for_element_to_appear(
-            locator=self.get_currency_from_cart_button(currency),
-            message=f'Валюта в кнопке корзины не соответствует {currency}'
-        )
+        with allure.step(f'Проверить что валюта на кнопке корзины изменена на {currency}'):
+            return self.wait_for_element_to_appear(
+                locator=self.get_currency_from_cart_button(currency),
+                message=f'Валюта в кнопке корзины не соответствует {currency}'
+            )
