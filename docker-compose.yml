@@ -59,7 +59,6 @@ services:
     build:
       dockerfile: Dockerfile
       context:  .
-#    command: pytest -v --browser firefox --browser_version 101.0
     depends_on:
       - opencart
       - selenoid

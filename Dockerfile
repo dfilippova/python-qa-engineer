@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ['pytest', '--browser', 'firefox', '--browser_version', '101.0']
+CMD ["pytest", "--browser", "firefox", "--browser_version", "101.0"]
