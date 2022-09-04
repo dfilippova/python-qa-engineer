@@ -18,7 +18,7 @@ def pytest_addoption(parser):
     parser.addoption('--browser_version')
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def driver(request):
     browser_name = request.config.getoption('--browser')
     drivers = request.config.getoption('--drivers')
