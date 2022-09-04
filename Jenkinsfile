@@ -4,7 +4,7 @@ pipeline {
     parameters {
         string defaultValue: '192.168.0.3', name: 'EXECUTOR'
         string defaultValue: 'http://192.168.0.3:8081', name: 'OPENCART_URL'
-        multiselect decisionTree: <object of type de.westemeyer.plugins.multiselect.MultiselectDecisionTree>, format: 'CSV', name: 'BROWSER INFO'
+        multiselect decisionTree: <object of type de.westemeyer.plugins.multiselect.MultiselectDecisionTree>, format: 'CSV', name: 'BROWSER_INFO'
         string defaultValue: '1', name: 'THREADS'
     }
 
