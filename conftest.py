@@ -11,9 +11,9 @@ from webdriver_manager.opera import OperaDriverManager
 def pytest_addoption(parser):
     parser.addoption('--browser', default='chrome')
     parser.addoption('--drivers', default=os.path.expanduser('~/Develop/drivers'))
-    parser.addoption('--url', default='http://192.168.2.86')
+    parser.addoption('--url', default='http://192.168.0.3')
     parser.addoption('--log_level', default='DEBUG')
-    parser.addoption('--executor', default='192.168.2.86')
+    parser.addoption('--executor', default='192.168.0.3')
     parser.addoption('--vnc', action='store_true')
     parser.addoption('--browser_version')
 
