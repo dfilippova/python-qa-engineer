@@ -17,8 +17,7 @@ pipeline {
                     python3 -m venv venv
                     . venv/bin/activate
                     pip3 install -r requirements.txt
-                    pytest -v tests --executor ${EXECUTOR} --url ${OPENCART_URL} --browser ${BROWSER}
-                    --browser_version ${BROWSER_VERSION} --vnc -n ${THREADS}
+                    pytest -v tests --executor ${EXECUTOR} --url ${OPENCART_URL} --browser ${BROWSER} --browser_version ${BROWSER_VERSION} --vnc -n ${THREADS}
                 """
             }
         }
