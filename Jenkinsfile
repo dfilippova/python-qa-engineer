@@ -1,13 +1,13 @@
 pipeline {
     agent any
 
-    parameters {
-        string defaultValue: '192.168.0.3', name: 'EXECUTOR'
-        string defaultValue: 'http://192.168.0.3', name: 'URL'
-        string defaultValue: 'chrome', name: 'BROWSER'
-        string defaultValue: '102.0', name: 'BROWSER_VERSION'
-        string defaultValue: '1', name: 'THREADS'
-    }
+//     parameters {
+//         string defaultValue: '192.168.0.3', name: 'EXECUTOR'
+//         string defaultValue: 'http://192.168.0.3', name: 'URL'
+//         string defaultValue: 'chrome', name: 'BROWSER'
+//         string defaultValue: '102.0', name: 'BROWSER_VERSION'
+//         string defaultValue: '1', name: 'THREADS'
+//     }
 
     stages {
         stage('tests') {
