@@ -2,6 +2,7 @@ import allure
 from selenium.webdriver.common.by import By
 
 from page_objects.base_page import BasePage
+from page_objects.logout_account_page import LogoutAccountPage
 from page_objects.register_account_page import RegisterAccountPage
 
 
@@ -57,3 +58,14 @@ class Header(BasePage):
                 locator=self.get_currency_from_cart_button(currency),
                 message=f'Валюта в кнопке корзины не соответствует {currency}'
             )
+
+    @allure.step('Выйти из аккаунта')
+    def logout(self) -> LogoutAccountPage:
+        self.click_on_element(self.MY_ACCOUNT_BUTTON)
+        self.wait_for_element_to_appear(
+            locator=self.DROPDOWN_MENU,
+            message='Меню не появилось после нажатия на кнопку'
+        )
+
+        self.click_on_element(self.get_context_menu_item('Logout'))
+        return LogoutAccountPage(self.driver)

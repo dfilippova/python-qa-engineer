@@ -58,17 +58,22 @@ def test_register_account_on_home_page(driver):
     """
     Кейс:
     - зайти на главную страницу
-    - открыть страницу регистрации пользователя с помощью кнопки My account
+    - открыть страницу регистрации пользователя с помощью кнопки My account и пункта меню Register
     - ввести данные пользователя и нажать на кнопку Continue
+    - выйти из аккаунта пользователя с помощью кнопки My account и пункта меню Logout
     Ожидается:
     - выпадающее меню появляется после нажатия на кнопку My account
     - заголовок Your Account Has Been Created! отображается после регистрации пользователя
+    - заголовок Account Logout отображается после выхода из аккаунта пользователя
     """
     home_page = HomePage(driver)
 
     register_account_page = home_page.header.open_register_account_page()
     success_register_account_page = register_account_page.register_account()
     success_register_account_page.check_success_header()
+
+    logout_page = home_page.header.logout()
+    logout_page.check_success_header()
 
 
 @allure.feature('Главная страница')
