@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
-        self.url = f'{driver.url}:8081'
+        self.url = driver.url
         self.logger = driver.logger
 
     def wait_for_element_to_appear(self, locator: tuple, message: str, timeout: int = 3):
