@@ -90,18 +90,21 @@ class AdminPage(BasePage):
                 message=f'Названия "{product_name}" нет в таблице товаров'
             )
 
-    def check_product_name_not_in_product_table(self, product_name: str):
-        with allure.step(f'Проверить отсутствие товара "{product_name}" в таблице товаров'):
-            self.filter_products_by_name(product_name)
-            self.wait_for_elements_to_appear(
-                locator=self.get_data_from_product_table(product_name),
-                message=f'Названия "{product_name}" не должно быть в таблице товаров',
-                quantity=0
-            )
+    def get_number_of_products_in_product_table(self, product_name: str) -> int:
+        with allure.step(f'Получить количество товаров с именем "{product_name}" в таблице товаров'):
+            return len(self.driver.find_elements(*self.get_data_from_product_table(product_name)))
 
     def delete_product(self, product_name: str):
         with allure.step(f'Удалить товар "{product_name}"'):
             self.filter_products_by_name(product_name)
+            expected_number_of_products = self.get_number_of_products_in_product_table(product_name) - 1
+
             self.click_on_element(self.get_item_checkbox_from_product_table(product_name))
             self.click_on_element(self.PRODUCTS_PAGE_DELETE_PRODUCT_BUTTON)
             self.confirm_alert()
+
+            self.wait_for_elements_to_appear(
+                locator=self.get_data_from_product_table(product_name),
+                message=f'Количество товаров с именем "{product_name}" должно соответствовать {expected_number_of_products}',
+                quantity=expected_number_of_products
+            )

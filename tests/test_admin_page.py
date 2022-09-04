@@ -90,4 +90,3 @@ def test_delete_product_on_admin_page(driver):
 
     admin_page.go_to_products_section()
     admin_page.delete_product(product_name)
-    admin_page.check_product_name_not_in_product_table(product_name)
