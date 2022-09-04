@@ -1,13 +1,13 @@
 pipeline {
     agent any
 
-//     parameters {
-//         string defaultValue: '192.168.0.3', name: 'EXECUTOR'
-//         string defaultValue: 'http://192.168.0.3', name: 'URL'
-//         string defaultValue: 'chrome', name: 'BROWSER'
-//         string defaultValue: '102.0', name: 'BROWSER_VERSION'
-//         string defaultValue: '1', name: 'THREADS'
-//     }
+    parameters {
+        string defaultValue: '192.168.0.3', name: 'EXECUTOR'
+        string defaultValue: 'http://192.168.0.3', name: 'URL'
+        string defaultValue: 'chrome', name: 'BROWSER'
+        string defaultValue: '102.0', name: 'BROWSER_VERSION'
+        string defaultValue: '1', name: 'THREADS'
+    }
 
     stages {
         stage('tests') {
@@ -17,8 +17,7 @@ pipeline {
                     python3 -m venv venv
                     . venv/bin/activate
                     pip3 install -r requirements.txt
-                    pytest -v tests --executor ${EXECUTOR} --url ${URL} --browser ${BROWSER}
-                    --browser_version ${BROWSER_VERSION} --vnc -n ${THREADS}
+                    pytest -v tests --executor ${EXECUTOR} --url ${URL} --browser ${BROWSER} --browser_version ${BROWSER_VERSION} --vnc -n ${THREADS}
                 """
             }
         }
