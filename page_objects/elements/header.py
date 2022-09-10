@@ -4,12 +4,15 @@ from selenium.webdriver.common.by import By
 from page_objects.base_page import BasePage
 from page_objects.logout_account_page import LogoutAccountPage
 from page_objects.register_account_page import RegisterAccountPage
+from page_objects.search_page import SearchPage
 
 
 class Header(BasePage):
     MY_ACCOUNT_BUTTON = (By.CSS_SELECTOR, '[title="My Account"]')
     DROPDOWN_MENU = (By.CSS_SELECTOR, '[id="top"] [class="dropdown-menu"]')
     CURRENCY_BUTTON = (By.CSS_SELECTOR, '[id="form-currency"]')
+    SEARCH_INPUT = (By.CSS_SELECTOR, '[id="search"] input')
+    SEARCH_BUTTON = (By.CSS_SELECTOR, '[id="search"] button')
 
     @staticmethod
     def get_context_menu_item(item_name: str):
@@ -69,3 +72,9 @@ class Header(BasePage):
 
         self.click_on_element(self.get_context_menu_item('Logout'))
         return LogoutAccountPage(self.driver)
+
+    def search_elements(self, data: str) -> SearchPage:
+        with allure.step(f'Search elements by text {data}'):
+            self.enter_data(self.SEARCH_INPUT, data)
+            self.click_on_element(self.SEARCH_BUTTON)
+        return SearchPage(self.driver)
