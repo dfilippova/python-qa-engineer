@@ -74,7 +74,7 @@ class Header(BasePage):
         return LogoutAccountPage(self.driver)
 
     def search_elements(self, data: str) -> SearchPage:
-        with allure.step(f'Search elements by text {data}'):
+        with allure.step(f'Найти элементы по тексту "{data}"'):
             self.enter_data(self.SEARCH_INPUT, data)
             self.click_on_element(self.SEARCH_BUTTON)
         return SearchPage(self.driver)
