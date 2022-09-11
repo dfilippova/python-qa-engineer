@@ -130,3 +130,5 @@ def test_create_order_on_home_page(driver):
     checkout_page.is_ready(checkout_page.CHECKOUT_OPTIONS_CONTINUE_BUTTON)
     success_order_page = checkout_page.create_order()
     success_order_page.check_success_header()
+
+    home_page.header.logout()
