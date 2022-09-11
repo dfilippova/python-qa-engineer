@@ -1,5 +1,5 @@
 import allure
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 
 
@@ -36,9 +36,14 @@ class BasePage:
     def enter_data(self, input_locator: tuple, data: str):
         with allure.step(f'Ввести данные "{data}" в инпут с локатором {input_locator}'):
             self.logger.info(f'Ввод данных "{data}" в инпут с локатором {input_locator}')
-            active_input = self.driver.find_element(*input_locator)
-            active_input.click()
-            active_input.send_keys(data)
+            try:
+                active_input = self.driver.find_element(*input_locator)
+                active_input.click()
+                active_input.send_keys(data)
+            except NoSuchElementException as e:
+                self.logger.error(f'Элемент с локатором {input_locator} не найден')
+                allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
+                raise AssertionError(e.msg)
 
     @allure.step('Подтвердить алерт')
     def confirm_alert(self):
@@ -50,3 +55,9 @@ class BasePage:
         with allure.step(f'Кликнуть на элемент с локатором {locator}'):
             self.logger.info(f'Клик на элемент с локатором {locator}')
             self.driver.find_element(*locator).click()
+
+    def is_ready(self, locator: tuple):
+        self.wait_for_element_to_appear(
+            locator=locator,
+            message=f'Страница не готова к работе, так как на ней отсутствует необходимый элемент с локатором {locator}'
+        )

@@ -2,6 +2,7 @@ import allure
 from selenium.webdriver.common.by import By
 
 from page_objects.base_page import BasePage
+from page_objects.cart_page import CartPage
 from page_objects.logout_account_page import LogoutAccountPage
 from page_objects.register_account_page import RegisterAccountPage
 from page_objects.search_page import SearchPage
@@ -13,6 +14,16 @@ class Header(BasePage):
     CURRENCY_BUTTON = (By.CSS_SELECTOR, '[id="form-currency"]')
     SEARCH_INPUT = (By.CSS_SELECTOR, '[id="search"] input')
     SEARCH_BUTTON = (By.CSS_SELECTOR, '[id="search"] button')
+    CART_BUTTON = (By.CSS_SELECTOR, '[id="cart"]')
+    CART_MENU = (By.CSS_SELECTOR, '[id="cart"][class*="btn-group btn-block open"] [class*="dropdown-menu pull-right"]')
+    VIEW_CART_BUTTON = (
+        By.XPATH, '//*[@id="cart"][contains(@class, "btn-group btn-block open")]'
+        '//*[contains(@class,"dropdown-menu pull-right")]//*[text()=" View Cart"]'
+    )
+    CHECKOUT_BUTTON = (
+        By.XPATH, '//*[@id="cart"][contains(@class, "btn-group btn-block open")]'
+        '//*[contains(@class,"dropdown-menu pull-right")]//*[text()=" Checkout"]'
+    )
 
     @staticmethod
     def get_context_menu_item(item_name: str):
@@ -78,3 +89,14 @@ class Header(BasePage):
             self.enter_data(self.SEARCH_INPUT, data)
             self.click_on_element(self.SEARCH_BUTTON)
         return SearchPage(self.driver)
+
+    @allure.step('Перейти в корзину')
+    def view_cart(self) -> CartPage:
+        self.click_on_element(self.CART_BUTTON)
+        self.wait_for_element_to_appear(
+            locator=self.CART_MENU,
+            message='Меню корзины не появилось после нажатия на кнопку'
+        )
+
+        self.click_on_element(self.VIEW_CART_BUTTON)
+        return CartPage(self.driver)

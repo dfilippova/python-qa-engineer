@@ -1,3 +1,5 @@
+from time import sleep
+
 import allure
 import pytest
 
@@ -92,3 +94,39 @@ def test_currency_change_on_home_page(driver, currency):
 
     home_page.header.change_currency(currency)
     home_page.header.check_currency_from_cart_button(currency)
+
+
+def test_create_order_on_home_page(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - добавить в корзину товар "iPhone"
+    - перейти в корзину
+    - оформить заказ
+    Ожидается:
+    - выпадающее меню появляется после нажатия на кнопку корзины
+    - товар с названием "iPhone" находится в корзине
+    - в корзине находится только один товар
+    - заголовок Your order has been placed! отображается после создания заказа
+    """
+    product_name = 'iPhone'
+
+    home_page = HomePage(driver)
+
+    home_page.add_product_to_cart('iPhone')
+    sleep(1)  # waiting for scroll animation
+    cart_page = home_page.header.view_cart()
+
+    all_product_names = cart_page.get_product_names()
+    with allure.step(f'Проверить что в корзине находится только один товар с названием {product_name}'):
+        if product_name not in all_product_names:
+            allure.attach(body=cart_page.driver.get_screenshot_as_png(), name='screenshot')
+            raise AssertionError(f'Товар с названием {product_name} должен находится в корзине')
+        elif len(all_product_names) != 1:
+            allure.attach(body=cart_page.driver.get_screenshot_as_png(), name='screenshot')
+            raise AssertionError(f'В корзине должен находиться только один товар')
+
+    checkout_page = cart_page.checkout()
+    checkout_page.is_ready(checkout_page.CHECKOUT_OPTIONS_CONTINUE_BUTTON)
+    success_order_page = checkout_page.create_order()
+    success_order_page.check_success_header()

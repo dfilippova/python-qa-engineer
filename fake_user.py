@@ -21,3 +21,15 @@ def fake_phone():
 
 def fake_password():
     return faker.password()
+
+
+def fake_address():
+    return faker.address()
+
+
+def fake_city():
+    return faker.city_name()
+
+
+def fake_postcode():
+    return faker.postcode()
