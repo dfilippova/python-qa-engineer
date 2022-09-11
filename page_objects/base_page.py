@@ -55,7 +55,7 @@ class BasePage:
     def click_on_element(self, locator: tuple):
         with allure.step(f'Кликнуть на элемент с локатором {locator}'):
             self.logger.info(f'Клик на элемент с локатором {locator}')
-            ActionChains(self.driver).move_to_element(self.driver.find_element(*locator)).click.perform()
+            ActionChains(self.driver).move_to_element(self.driver.find_element(*locator)).click().perform()
 
     def is_ready(self, locator: tuple):
         self.wait_for_element_to_appear(
