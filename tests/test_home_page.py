@@ -130,3 +130,31 @@ def test_create_order_on_home_page(driver):
     success_order_page.check_success_header()
 
     home_page.header.logout()
+
+
+def test_remove_product_from_cart_menu_on_home_page(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - добавить в корзину товар "iPhone"
+    - удалить товар "iPhone" из меню корзины
+    Ожидается:
+    - товар "iPhone" отображается в выпадающем меню корзины после добавления
+    - товар "iPhone" не отображается в выпадающем меню корзины после удаления
+    """
+    product_name = 'iPhone'
+
+    home_page = HomePage(driver)
+
+    home_page.add_product_to_cart('iPhone')
+    home_page.wait_for_scroll_animation()
+    with allure.step(f'Проверить что товар {product_name} отображается в меню корзины'):
+        if product_name not in home_page.header.get_all_product_names_from_cart_menu():
+            allure.attach(body=home_page.driver.get_screenshot_as_png(), name='screenshot')
+            raise AssertionError(f'Товар с названием {product_name} должен отображаться в меню корзины')
+
+    home_page.header.remove_product_from_cart_menu(product_name)
+    with allure.step(f'Проверить что товар {product_name} не отображается в меню корзины'):
+        if product_name in home_page.header.get_all_product_names_from_cart_menu():
+            allure.attach(body=home_page.driver.get_screenshot_as_png(), name='screenshot')
+            raise AssertionError(f'Товар с названием {product_name} не должен отображаться в меню корзины')

@@ -1,3 +1,5 @@
+from typing import List
+
 import allure
 from selenium.webdriver.common.by import By
 
@@ -24,6 +26,7 @@ class Header(BasePage):
         By.XPATH, '//*[@id="cart"][contains(@class, "btn-group btn-block open")]'
         '//*[contains(@class,"dropdown-menu pull-right")]//*[text()=" Checkout"]'
     )
+    PRODUCT_NAMES_FROM_CART_MENU = (By.CSS_SELECTOR, '[class*="dropdown-menu pull-right"] [class="text-left"] a')
 
     @staticmethod
     def get_context_menu_item(item_name: str):
@@ -36,6 +39,13 @@ class Header(BasePage):
     @staticmethod
     def get_currency_from_cart_button(currency: str):
         return By.XPATH, f'//*[contains(@id, "cart-total")][contains(text(), "{currency}")]'
+
+    @staticmethod
+    def get_remove_button_from_cart_menu(product_name: str):
+        return (
+            By.XPATH, f'//*[text()="{product_name}"]//parent::*[contains(@class, "text-left")]'
+            '//following-sibling::*[contains(@class, "text-center")]//*[@type="button"]'
+        )
 
     @allure.step('Открыть страницу регистрации пользователя с помощью кнопки My account')
     def open_register_account_page(self) -> RegisterAccountPage:
@@ -90,13 +100,32 @@ class Header(BasePage):
             self.click_on_element(self.SEARCH_BUTTON)
         return SearchPage(self.driver)
 
+    @allure.step('Открыть меню корзины')
+    def open_cart_menu(self):
+        if not self.element_is_displayed(self.CART_MENU, timeout=1):
+            self.click_on_element(self.CART_BUTTON)
+            self.wait_for_element_to_appear(
+                locator=self.CART_MENU,
+                message='Меню корзины не появилось после нажатия на кнопку'
+            )
+
     @allure.step('Перейти в корзину')
     def view_cart(self) -> CartPage:
-        self.click_on_element(self.CART_BUTTON)
-        self.wait_for_element_to_appear(
-            locator=self.CART_MENU,
-            message='Меню корзины не появилось после нажатия на кнопку'
-        )
-
+        self.open_cart_menu()
         self.click_on_element(self.VIEW_CART_BUTTON)
         return CartPage(self.driver)
+
+    def remove_product_from_cart_menu(self, product_name: str):
+        with allure.step(f'Удалить товар {product_name} из меню корзины'):
+            self.open_cart_menu()
+            self.click_on_element(self.get_remove_button_from_cart_menu(product_name))
+
+    @allure.step('Получить названия товаров из меню корзины')
+    def get_all_product_names_from_cart_menu(self) -> List[str]:
+        self.logger.info('Получение названий товаров из меню корзины')
+        self.open_cart_menu()
+        return [
+            product.get_attribute('textContent') for product in self.driver.find_elements(
+                *self.PRODUCT_NAMES_FROM_CART_MENU
+            )
+        ]
