@@ -1,5 +1,3 @@
-from time import sleep
-
 import allure
 import pytest
 
@@ -114,7 +112,7 @@ def test_create_order_on_home_page(driver):
     home_page = HomePage(driver)
 
     home_page.add_product_to_cart('iPhone')
-    sleep(1)  # waiting for scroll animation
+    home_page.wait_for_scroll_animation()
     cart_page = home_page.header.view_cart()
 
     all_product_names = cart_page.get_product_names()
@@ -127,7 +125,7 @@ def test_create_order_on_home_page(driver):
             raise AssertionError(f'В корзине должен находиться только один товар')
 
     checkout_page = cart_page.checkout()
-    sleep(1)  # waiting for scroll animation
+    checkout_page.wait_for_scroll_animation()
     success_order_page = checkout_page.create_order()
     success_order_page.check_success_header()
 

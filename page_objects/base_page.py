@@ -1,3 +1,5 @@
+from time import sleep
+
 import allure
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.support.wait import WebDriverWait
@@ -64,3 +66,8 @@ class BasePage:
             )
         except TimeoutException:
             return False
+
+    @allure.step('Подождать окончания анимации')
+    def wait_for_scroll_animation(self):
+        self.logger.info('Ожидание окончания анимации в течение 1 секунды')
+        sleep(1)
