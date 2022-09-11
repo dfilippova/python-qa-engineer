@@ -26,7 +26,7 @@ class Header(BasePage):
         By.XPATH, '//*[@id="cart"][contains(@class, "btn-group btn-block open")]'
         '//*[contains(@class,"dropdown-menu pull-right")]//*[text()=" Checkout"]'
     )
-    PRODUCT_NAMES_FROM_CART_MENU = (By.CSS_SELECTOR, '[class*="dropdown-menu pull-right"] [class="text-left"] a')
+    PRODUCT_NAME_FROM_CART_MENU = (By.CSS_SELECTOR, '[class*="dropdown-menu pull-right"] [class="text-left"] a')
 
     @staticmethod
     def get_context_menu_item(item_name: str):
@@ -126,6 +126,6 @@ class Header(BasePage):
         self.open_cart_menu()
         return [
             product.get_attribute('textContent') for product in self.driver.find_elements(
-                *self.PRODUCT_NAMES_FROM_CART_MENU
+                *self.PRODUCT_NAME_FROM_CART_MENU
             )
         ]

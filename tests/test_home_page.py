@@ -94,6 +94,8 @@ def test_currency_change_on_home_page(driver, currency):
     home_page.header.check_currency_from_cart_button(currency)
 
 
+@allure.feature('Главная страница')
+@allure.title('Проверка создания заказа')
 def test_create_order_on_home_page(driver):
     """
     Кейс:
@@ -111,7 +113,7 @@ def test_create_order_on_home_page(driver):
 
     home_page = HomePage(driver)
 
-    home_page.add_product_to_cart('iPhone')
+    home_page.add_product_to_cart(product_name)
     home_page.wait_for_scroll_animation()
     cart_page = home_page.header.view_cart()
 
@@ -132,6 +134,8 @@ def test_create_order_on_home_page(driver):
     home_page.header.logout()
 
 
+@allure.feature('Главная страница')
+@allure.title('Проверка добавление и удаления товара в меню корзины')
 def test_remove_product_from_cart_menu_on_home_page(driver):
     """
     Кейс:
