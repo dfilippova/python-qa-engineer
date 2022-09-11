@@ -1,4 +1,5 @@
 import allure
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
@@ -43,6 +44,9 @@ class CheckoutPage(BasePage):
             city: str = fake_city(), post_code: str = fake_postcode(), region: str = 'Angus'
     ) -> SuccessOrderPage:
         with allure.step('Оформить заказ'):
+            ActionChains(self.driver).move_to_element(
+                self.driver.find_element(*self.CHECKOUT_OPTIONS_CONTINUE_BUTTON)
+            ).perform()
             self.click_on_element(self.CHECKOUT_OPTIONS_CONTINUE_BUTTON)
             self.is_ready(self.ACCOUNT_DETAILS_FIRST_NAME_INPUT)
 
