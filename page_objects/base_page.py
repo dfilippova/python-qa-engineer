@@ -9,7 +9,7 @@ class BasePage:
         self.url = driver.url
         self.logger = driver.logger
 
-    def wait_for_element_to_appear(self, locator: tuple, message: str, timeout: int = 3):
+    def wait_for_element_to_appear(self, locator: tuple, message: str, timeout: int = 5):
         with allure.step(f'Подождать появления элемента с локатором {locator}'):
             self.logger.info(f'Ожидание появления элемента с локатором {locator}')
             try:
@@ -21,7 +21,7 @@ class BasePage:
                 allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
                 raise AssertionError(e.msg)
 
-    def wait_for_elements_to_appear(self, locator: tuple, message: str, quantity: int = 1, timeout: int = 3):
+    def wait_for_elements_to_appear(self, locator: tuple, message: str, quantity: int = 1, timeout: int = 5):
         with allure.step(f'Подождать появления элементов с локатором {locator} в количестве {quantity}'):
             self.logger.info(f'Ожидание появления элементов с локатором {locator} в количестве {quantity}')
             try:
