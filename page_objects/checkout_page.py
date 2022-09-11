@@ -84,8 +84,8 @@ class CheckoutPage(BasePage):
                     self.wait_for_scroll_animation()
                     self.click_on_element(self.DELIVERY_DETAIL_CONTINUE_BUTTON)
                     self.wait_for_scroll_animation()
+                    self.click_on_element(self.DELIVERY_METHOD_CONTINUE_BUTTON)
 
-            self.click_on_element(self.DELIVERY_METHOD_CONTINUE_BUTTON)
             self.wait_for_scroll_animation()
 
             self.click_on_element(self.PAYMENT_METHOD_PRIVACY_POLICY_CHECKBOX)
