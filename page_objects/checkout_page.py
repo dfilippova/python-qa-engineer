@@ -1,3 +1,5 @@
+from time import sleep
+
 import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
@@ -30,6 +32,14 @@ class CheckoutPage(BasePage):
     ACCOUNT_DETAILS_PRIVACY_POLICY_CHECKBOX = (By.CSS_SELECTOR, '[id="collapse-payment-address"] [name="agree"]')
     ACCOUNT_DETAILS_CONTINUE_BUTTON = (By.CSS_SELECTOR, '[id="collapse-payment-address"] [id="button-register"]')
 
+    DELIVERY_DETAIL_BUTTON = (
+        By.XPATH, '//*[contains(@class, "panel panel-default")]//*[text()="Step 3: Delivery Details "]'
+    )
+    DELIVERY_DETAIL_CONTINUE_BUTTON = (
+        By.CSS_SELECTOR, '[id="collapse-shipping-address"] [id="button-shipping-address"]'
+    )
+
+    DELIVERY_METHOD_ALERT = (By.CSS_SELECTOR, '[id="collapse-shipping-method"] [class*="alert-danger"]')
     DELIVERY_METHOD_CONTINUE_BUTTON = (By.CSS_SELECTOR, '[id="collapse-shipping-method"] [id="button-shipping-method"]')
 
     PAYMENT_METHOD_PRIVACY_POLICY_CHECKBOX = (By.CSS_SELECTOR, '[id="collapse-payment-method"] [name="agree"]')
@@ -44,7 +54,7 @@ class CheckoutPage(BasePage):
     ) -> SuccessOrderPage:
         with allure.step('Оформить заказ'):
             self.click_on_element(self.CHECKOUT_OPTIONS_CONTINUE_BUTTON)
-            self.is_ready(self.ACCOUNT_DETAILS_FIRST_NAME_INPUT)
+            sleep(1)  # waiting for scroll animation
 
             self.enter_data(self.ACCOUNT_DETAILS_FIRST_NAME_INPUT, first_name)
             self.enter_data(self.ACCOUNT_DETAILS_LAST_NAME_INPUT, last_name)
@@ -63,14 +73,23 @@ class CheckoutPage(BasePage):
 
             self.click_on_element(self.ACCOUNT_DETAILS_PRIVACY_POLICY_CHECKBOX)
             self.click_on_element(self.ACCOUNT_DETAILS_CONTINUE_BUTTON)
-            self.is_ready(self.DELIVERY_METHOD_CONTINUE_BUTTON)
+            sleep(1)  # waiting for scroll animation
 
             self.click_on_element(self.DELIVERY_METHOD_CONTINUE_BUTTON)
-            self.is_ready(self.PAYMENT_METHOD_PRIVACY_POLICY_CHECKBOX)
+            if self.element_is_displayed(self.DELIVERY_METHOD_ALERT):
+                self.click_on_element(self.DELIVERY_DETAIL_BUTTON)
+                sleep(1)  # waiting for scroll animation
+                self.element_is_displayed(self.DELIVERY_DETAIL_CONTINUE_BUTTON)
+                sleep(1)  # waiting for scroll animation
+                self.click_on_element(self.DELIVERY_DETAIL_CONTINUE_BUTTON)
+                sleep(1)  # waiting for scroll animation
+
+            self.click_on_element(self.DELIVERY_METHOD_CONTINUE_BUTTON)
+            sleep(1)  # waiting for scroll animation
 
             self.click_on_element(self.PAYMENT_METHOD_PRIVACY_POLICY_CHECKBOX)
             self.click_on_element(self.PAYMENT_METHOD_CONTINUE_BUTTON)
-            self.is_ready(self.CHECKOUT_CONFIRM_BUTTON)
+            sleep(1)  # waiting for scroll animation
 
             self.click_on_element(self.CHECKOUT_CONFIRM_BUTTON)
             return SuccessOrderPage(self.driver)

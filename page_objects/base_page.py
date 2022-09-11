@@ -56,8 +56,11 @@ class BasePage:
             self.logger.info(f'Клик на элемент с локатором {locator}')
             self.driver.find_element(*locator).click()
 
-    def is_ready(self, locator: tuple):
-        self.wait_for_element_to_appear(
-            locator=locator,
-            message=f'Страница не готова к работе, так как на ней отсутствует необходимый элемент с локатором {locator}'
-        )
+    def element_is_displayed(self, locator: tuple, timeout: int = 3) -> bool:
+        try:
+            return WebDriverWait(self.driver, timeout).until(
+                method=lambda _driver: self.driver.find_elements(*locator),
+                message=f'Элемент с локатором {locator} не найден'
+            )
+        except TimeoutException:
+            return False
