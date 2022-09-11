@@ -1,5 +1,6 @@
 import allure
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 
 
@@ -54,7 +55,7 @@ class BasePage:
     def click_on_element(self, locator: tuple):
         with allure.step(f'Кликнуть на элемент с локатором {locator}'):
             self.logger.info(f'Клик на элемент с локатором {locator}')
-            self.driver.find_element(*locator).click()
+            ActionChains(self.driver).move_to_element(self.driver.find_element(*locator)).click.perform()
 
     def is_ready(self, locator: tuple):
         self.wait_for_element_to_appear(
