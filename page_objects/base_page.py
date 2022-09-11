@@ -1,5 +1,5 @@
 import allure
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.support.wait import WebDriverWait
 
 
@@ -40,7 +40,7 @@ class BasePage:
                 active_input = self.driver.find_element(*input_locator)
                 active_input.click()
                 active_input.send_keys(data)
-            except NoSuchElementException as e:
+            except (NoSuchElementException, ElementNotInteractableException) as e:
                 self.logger.error(f'Элемент с локатором {input_locator} не найден')
                 allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
                 raise AssertionError(e.msg)
