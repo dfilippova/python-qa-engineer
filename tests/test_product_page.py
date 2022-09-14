@@ -73,8 +73,31 @@ def test_add_multiple_products_to_cart(driver):
     product_page = ProductPage(driver)
 
     product_page.add_product_to_cart(quantity)
+    product_page.wait_for_scroll_animation()
 
     product_price = product_page.get_product_price()
     product_page.header.check_quantity_and_price_on_cart_button(
         quantity, '{0:.2f}'.format(float(product_price[1:len(product_price)]) * int(quantity))
     )
+
+
+@allure.feature('Страница товара')
+@allure.title('Проверка добавления отзыва')
+def test_write_review(driver):
+    """
+    Кейс:
+    - зайти на страницу товара /iphone
+    - переключиться на вкладку Review
+    - добавить отзыв
+    Ожидается:
+    - алерт Thank you for your review. It has been submitted to the webmaster for approval отображается на странице
+    """
+    product_page = ProductPage(driver)
+
+    product_page.write_review(
+        name='Test review user',
+        review='Test review text about iPhone',
+        rating='4'
+    )
+
+    product_page.check_success_review_alert()

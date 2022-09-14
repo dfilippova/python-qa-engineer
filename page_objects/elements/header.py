@@ -141,7 +141,8 @@ class Header(BasePage):
             if text_on_cart_button[1] != quantity:
                 allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
                 raise AssertionError(
-                    f'Количество товаров на кнопке корзины не соответствует {quantity}')
+                    f'Количество товаров на кнопке корзины не соответствует {quantity}'
+                )
 
             if text_on_cart_button.split('$')[1] != price:
                 allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
