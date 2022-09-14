@@ -55,3 +55,26 @@ def test_elements_on_product_page(driver):
         locator=product_page.REVIEW_TAB,
         message='Вкладка Review отсутствует на странице товара'
     )
+
+
+@allure.feature('Страница товара')
+@allure.title('Проверка добавления в корзину нескольких товаров')
+def test_add_multiple_products_to_cart(driver):
+    """
+    Кейс:
+    - зайти на страницу товара /iphone
+    - изменить количество товара в инпуте на 3
+    - нажать на кнопку Add to Cart
+    Ожидается:
+    - количество товара на кнопке корзины соответствует 3
+    - цена товара на кнопке корзины соответствует цене товара умноженной на количество товара
+    """
+    quantity = '3'
+    product_page = ProductPage(driver)
+
+    product_page.add_product_to_cart(quantity)
+
+    product_price = product_page.get_product_price()
+    product_page.header.check_quantity_and_price_on_cart_button(
+        quantity, '{0:.2f}'.format(float(product_price[1:len(product_price)]) * int(quantity))
+    )

@@ -27,6 +27,7 @@ class Header(BasePage):
         '//*[contains(@class,"dropdown-menu pull-right")]//*[text()=" Checkout"]'
     )
     PRODUCT_NAME_FROM_CART_MENU = (By.CSS_SELECTOR, '[class*="dropdown-menu pull-right"] [class="text-left"] a')
+    TEXT_ON_CART_BUTTON = (By.CSS_SELECTOR, '[id="cart-total"]')
 
     @staticmethod
     def get_context_menu_item(item_name: str):
@@ -129,3 +130,20 @@ class Header(BasePage):
                 *self.PRODUCT_NAME_FROM_CART_MENU
             )
         ]
+
+    def check_quantity_and_price_on_cart_button(self, quantity: str = '1', price: str = '0.00'):
+        with allure.step(
+                f'Проверить что количество товаров на кнопке корзины соответствует {quantity}, а цена составляет {price}'
+        ):
+            self.logger.info('Проверка количества товаров и цены на кнопке корзины')
+            text_on_cart_button = self.driver.find_element(*self.TEXT_ON_CART_BUTTON).get_attribute('textContent')
+
+            if text_on_cart_button[1] != quantity:
+                allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
+                raise AssertionError(
+                    f'Количество товаров на кнопке корзины не соответствует {quantity}')
+
+            if text_on_cart_button.split('$')[1] != price:
+                allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
+                raise AssertionError(
+                    f'Цена на кнопке корзины не соответствует {price}')
