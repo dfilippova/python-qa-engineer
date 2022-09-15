@@ -5,6 +5,8 @@ from page_objects.contact_us_page import ContactUsPage
 
 
 class Footer(BasePage):
+    OPENCART_BUTTON = (By.CSS_SELECTOR, 'footer p a')
+
     @staticmethod
     def get_footer_button(button_name: str):
         return By.XPATH, f'//footer//*[text()="{button_name}"]'
@@ -12,3 +14,6 @@ class Footer(BasePage):
     def contact_us(self) -> ContactUsPage:
         self.click_on_element(self.get_footer_button('Contact Us'))
         return ContactUsPage(self.driver)
+
+    def go_to_opencart_page(self):
+        self.click_on_element(self.OPENCART_BUTTON)

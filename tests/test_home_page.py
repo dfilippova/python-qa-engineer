@@ -134,6 +134,7 @@ def test_create_order_on_home_page(driver):
     home_page.header.logout()
 
 
+@pytest.mark.skip()
 @allure.feature('Главная страница')
 @allure.title('Проверка добавление и удаления товара в меню корзины')
 def test_remove_product_from_cart_menu_on_home_page(driver):
@@ -180,3 +181,24 @@ def test_send_enquiry(driver):
     contact_us_page = home_page.footer.contact_us()
     contact_us_page.send_enquiry()
     contact_us_page.check_success_enquiry_sending()
+
+
+@allure.feature('Главная страница')
+@allure.title('Проверка перехода на страницу OpenCart')
+def test_go_to_opencart_page(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - нажать на кнопку OpenCart в футере страницы
+    Ожидается:
+    - ссылка страницы соответствует https://www.opencart.com/
+    """
+    opencart_link = 'https://www.opencart.com/'
+
+    home_page = HomePage(driver)
+
+    home_page.footer.go_to_opencart_page()
+
+    if driver.current_url != opencart_link:
+        allure.attach(body=home_page.driver.get_screenshot_as_png(), name='screenshot')
+        raise AssertionError(f'Ссылка {opencart_link} не была открыта после нажатия на кнопку OpenCart в футере')
