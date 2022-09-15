@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from page_objects.catalog_page import CatalogPage
 
@@ -48,3 +49,32 @@ def test_elements_on_catalog_page(driver):
         message='Количество карточек товаров на странице каталога не соответствует двенадцати',
         quantity=12
     )
+
+
+@pytest.mark.parametrize('sort_by, reverse', [('Name (A - Z)', False), ('Name (Z - A)', True)], ids=[
+    'Name (A - Z)', 'Name (Z - A)'
+])
+@allure.feature('Страница каталога')
+@allure.title('Проверка сортировки товаров по имени на странице каталога')
+def test_sort_elements_on_catalog_page(driver, sort_by, reverse):
+    """
+    Кейс:
+    - зайти на страницу каталога /desktops
+    - изменить сортировку
+    Ожидается:
+    - порядок товаров на странице соответствует сортировке
+    """
+    catalog_page = CatalogPage(driver)
+
+    product_list = catalog_page.get_product_list()
+    product_list.sort(key=str.lower, reverse=reverse)
+
+    catalog_page.change_sorting(sort_by)
+    new_product_list = catalog_page.get_product_list()
+
+    if new_product_list != product_list:
+        allure.attach(body=catalog_page.driver.get_screenshot_as_png(), name='screenshot')
+        raise AssertionError(
+            f'Товары на странице должны быть отображены в следующем порядке: {product_list}, '
+            f'но фактический порядок: {new_product_list}'
+        )

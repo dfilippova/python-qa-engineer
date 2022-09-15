@@ -134,7 +134,6 @@ def test_create_order_on_home_page(driver):
     home_page.header.logout()
 
 
-@pytest.mark.skip()
 @allure.feature('Главная страница')
 @allure.title('Проверка добавление и удаления товара в меню корзины')
 def test_remove_product_from_cart_menu_on_home_page(driver):
