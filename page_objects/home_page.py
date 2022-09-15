@@ -55,7 +55,7 @@ class HomePage(BasePage):
                 raise AssertionError(e.msg)
 
     def add_product_to_wishlist(self, product_name: str):
-        with allure.step(f'Добавить товар {product_name} в список избранного'):
+        with allure.step(f'Добавить товар {product_name} в список желаемого'):
             try:
                 self.click_on_element(self.get_add_to_wishlist_button(product_name))
             except NoSuchElementException as e:

@@ -202,3 +202,25 @@ def test_go_to_opencart_page(driver):
     if driver.current_url != opencart_link:
         allure.attach(body=home_page.driver.get_screenshot_as_png(), name='screenshot')
         raise AssertionError(f'Ссылка {opencart_link} не была открыта после нажатия на кнопку OpenCart в футере')
+
+
+@allure.feature('Главная страница')
+@allure.title('Проверка добавления товара в список желаемого')
+def test_product_to_wishlist(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - добавить iPhone в список желаемого
+    Ожидается:
+    - количество товаров на кнопке Wish List в хедере соответствует 1
+    """
+    product_name = 'iPhone'
+    product_count = '1'
+
+    home_page = HomePage(driver)
+
+    home_page.add_product_to_wishlist(product_name)
+
+    if home_page.header.get_number_of_products_in_wishlist() != product_count:
+        allure.attach(body=home_page.driver.get_screenshot_as_png(), name='screenshot')
+        raise AssertionError(f'Количество товаров на кнопке Wish List в хедере не соответствует {product_count}')

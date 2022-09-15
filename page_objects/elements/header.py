@@ -28,6 +28,7 @@ class Header(BasePage):
     )
     PRODUCT_NAME_FROM_CART_MENU = (By.CSS_SELECTOR, '[class*="dropdown-menu pull-right"] [class="text-left"] a')
     TEXT_ON_CART_BUTTON = (By.CSS_SELECTOR, '[id="cart-total"]')
+    TEXT_ON_WISHLIST_BUTTON = (By.CSS_SELECTOR, '[id="wishlist-total"] span')
 
     @staticmethod
     def get_context_menu_item(item_name: str):
@@ -148,3 +149,9 @@ class Header(BasePage):
                 allure.attach(body=self.driver.get_screenshot_as_png(), name='screenshot')
                 raise AssertionError(
                     f'Цена на кнопке корзины не соответствует {price}')
+
+    @allure.step('Получить количество товаров на кнопке Wish List')
+    def get_number_of_products_in_wishlist(self) -> str:
+        self.logger.info('Получение количества товаров на кнопке Wish List')
+        text_on_wishlist_button = self.driver.find_element(*self.TEXT_ON_WISHLIST_BUTTON).get_attribute('textContent')
+        return text_on_wishlist_button.split('(')[1].split(')')[0]
