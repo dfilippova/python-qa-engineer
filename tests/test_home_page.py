@@ -162,3 +162,21 @@ def test_remove_product_from_cart_menu_on_home_page(driver):
         if product_name in home_page.header.get_all_product_names_from_cart_menu():
             allure.attach(body=home_page.driver.get_screenshot_as_png(), name='screenshot')
             raise AssertionError(f'Товар с названием {product_name} не должен отображаться в меню корзины')
+
+
+@allure.feature('Главная страница')
+@allure.title('Проверка отправления запроса с помощью формы Contact Us')
+def test_send_enquiry(driver):
+    """
+    Кейс:
+    - зайти на главную страницу
+    - нажать на кнопку Contact Us в футере страницы
+    - заполнить форму и нажать на кнопку Submit
+    Ожидается:
+    - на странице появился заголовок Your enquiry has been successfully sent to the store owner!
+    """
+    home_page = HomePage(driver)
+
+    contact_us_page = home_page.footer.contact_us()
+    contact_us_page.send_enquiry()
+    contact_us_page.check_success_enquiry_sending()

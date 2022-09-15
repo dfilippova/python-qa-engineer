@@ -3,6 +3,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 from page_objects.base_page import BasePage
+from page_objects.elements.footer import Footer
 from page_objects.elements.header import Header
 from page_objects.product_comparison_page import ProductComparisonPage
 
@@ -11,6 +12,7 @@ class HomePage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.header = Header(self.driver)
+        self.footer = Footer(self.driver)
         self.driver.get(self.url)
 
     SLIDESHOW = (By.CSS_SELECTOR, '[class="slideshow swiper-viewport"]')
